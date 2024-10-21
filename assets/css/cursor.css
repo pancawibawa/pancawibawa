@@ -1,0 +1,38 @@
+.circle {
+    height: 24px;
+    width: 24px;
+    border-radius: 50%; /* Menggunakan 50% untuk membuat lingkaran */
+    background-color: black;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 99999999; /* Supaya tetap di atas semua elemen lain */
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    background-color: #222;
+}
+
+/* CSS untuk hero section */
+#hero {
+    position: relative; /* Agar canvas dapat diposisikan di dalamnya */
+    overflow: hidden; /* Menyembunyikan bagian canvas yang melampaui */
+}
+
+#hero canvas {
+    position: absolute; /* Agar canvas tidak tetap pada posisi fixed */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0; /* Pastikan canvas berada di belakang konten hero */
+}
+
+#hero .container {
+    position: relative;
+    z-index: 1; /* Konten hero tetap di atas canvas */
+}
