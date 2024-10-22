@@ -1,92 +1,170 @@
-const coords = { x: 0, y: 0 };
-const circles = document.querySelectorAll(".circle");
+// const coords = { x: 0, y: 0 };
+// const circles = document.querySelectorAll(".circle");
+
+// // const colors = [
+// //   "#ffb56b",
+// //   "#fdaf69",
+// //   "#f89d63",
+// //   "#f59761",
+// //   "#ef865e",
+// //   "#ec805d",
+// //   "#e36e5c",
+// //   "#df685c",
+// //   "#d5585c",
+// //   "#d1525c",
+// //   "#c5415d",
+// //   "#c03b5d",
+// //   "#b22c5e",
+// //   "#ac265e",
+// //   "#9c155f",
+// //   "#950f5f",
+// //   "#830060",
+// //   "#7c0060",
+// //   "#680060",
+// //   "#60005f",
+// //   "#48005f",
+// //   "#3d005e"
+// // ];
 
 // const colors = [
-//   "#ffb56b",
-//   "#fdaf69",
-//   "#f89d63",
-//   "#f59761",
-//   "#ef865e",
-//   "#ec805d",
-//   "#e36e5c",
-//   "#df685c",
-//   "#d5585c",
-//   "#d1525c",
-//   "#c5415d",
-//   "#c03b5d",
-//   "#b22c5e",
-//   "#ac265e",
-//   "#9c155f",
-//   "#950f5f",
-//   "#830060",
-//   "#7c0060",
-//   "#680060",
-//   "#60005f",
-//   "#48005f",
-//   "#3d005e"
-// ];
-
-const colors = [
-    "#FABC3F", // Gold
-    "#f6ab56", // Golden Orange
-    "#f29a6c", // Light Peach
-    "#ee8978", // Soft Orange
-    "#ea7985", // Light Salmon
-    "#e56b91", // Peachy Pink
-    "#e15c9e", // Pinky Red
-    "#dc4dab", // Light Magenta
-    "#d83fb8", // Soft Magenta
-    "#d332c4", // Magenta
-    "#ce24d0", // Dark Magenta
-    "#c715d9", // Deep Magenta
-    "#b013c6", // Magenta Violet
-    "#9e10b4", // Dark Violet
-    "#8c0da1", // Dark Purple
-    "#7a0a8e", // Purple
-    "#69067c", // Deep Purple
-    "#570469", // Dark Violet
-    "#460256", // Deep Violet
-    "#340043", // Dark Indigo
-    "#230030", // Dark Purple-Black
-    "#12001d"  // Deep Black Purple
-  ];
+//     "#FABC3F", // Gold
+//     "#f6ab56", // Golden Orange
+//     "#f29a6c", // Light Peach
+//     "#ee8978", // Soft Orange
+//     "#ea7985", // Light Salmon
+//     "#e56b91", // Peachy Pink
+//     "#e15c9e", // Pinky Red
+//     "#dc4dab", // Light Magenta
+//     "#d83fb8", // Soft Magenta
+//     "#d332c4", // Magenta
+//     "#ce24d0", // Dark Magenta
+//     "#c715d9", // Deep Magenta
+//     "#b013c6", // Magenta Violet
+//     "#9e10b4", // Dark Violet
+//     "#8c0da1", // Dark Purple
+//     "#7a0a8e", // Purple
+//     "#69067c", // Deep Purple
+//     "#570469", // Dark Violet
+//     "#460256", // Deep Violet
+//     "#340043", // Dark Indigo
+//     "#230030", // Dark Purple-Black
+//     "#12001d"  // Deep Black Purple
+//   ];
   
 
+// circles.forEach(function (circle, index) {
+//   circle.x = 0;
+//   circle.y = 0;
+//   circle.style.backgroundColor = colors[index % colors.length];
+// });
+
+// window.addEventListener("mousemove", function(e){
+//   coords.x = e.clientX;
+//   coords.y = e.clientY;
+  
+// });
+
+// function animateCircles() {
+  
+//   let x = coords.x;
+//   let y = coords.y;
+  
+//   circles.forEach(function (circle, index) {
+//     circle.style.left = x - 12 + "px";
+//     circle.style.top = y - 12 + "px";
+    
+//     circle.style.scale = (circles.length - index) / circles.length;
+    
+//     circle.x = x;
+//     circle.y = y;
+
+//     const nextCircle = circles[index + 1] || circles[0];
+//     x += (nextCircle.x - x) * 0.3;
+//     y += (nextCircle.y - y) * 0.3;
+//   });
+ 
+//   requestAnimationFrame(animateCircles);
+// }
+
+// animateCircles();
+
+
+
+//=======================================================================
+
+const coords = { x: 0, y: 0 };
+const circles = document.querySelectorAll(".circle");
+let mouseMoving = false;
+let hideTimeout;
+
+// Ubah warna lingkaran sesuai dengan urutan
+const colors = [
+    "#FABC3F", "#f6ab56", "#f29a6c", "#ee8978", "#ea7985", "#e56b91", "#e15c9e", "#dc4dab", "#d83fb8", "#d332c4", "#ce24d0", 
+    "#c715d9", "#b013c6", "#9e10b4", "#8c0da1", "#7a0a8e", "#69067c", "#570469", "#460256", "#340043", "#230030", "#12001d"
+];
+
 circles.forEach(function (circle, index) {
-  circle.x = 0;
-  circle.y = 0;
-  circle.style.backgroundColor = colors[index % colors.length];
+    circle.x = 0;
+    circle.y = 0;
+    circle.style.backgroundColor = colors[index % colors.length];
+    circle.style.display = "none"; // Sembunyikan circle secara default
 });
 
 window.addEventListener("mousemove", function(e){
-  coords.x = e.clientX;
-  coords.y = e.clientY;
-  
+    coords.x = e.clientX;
+    coords.y = e.clientY;
+    mouseMoving = true;
+
+    // Tampilkan semua circle saat mouse bergerak
+    circles.forEach(function(circle) {
+        circle.style.display = "block";
+    });
+
+    // Reset timeout saat mouse bergerak
+    clearTimeout(hideTimeout);
+
+    // Sembunyikan circle setelah 1 detik jika mouse berhenti bergerak
+    hideTimeout = setTimeout(function() {
+        mouseMoving = false;
+        circles.forEach(function(circle) {
+            circle.style.display = "none";
+        });
+    }, 100); // 1 detik
 });
 
 function animateCircles() {
-  
-  let x = coords.x;
-  let y = coords.y;
-  
-  circles.forEach(function (circle, index) {
-    circle.style.left = x - 12 + "px";
-    circle.style.top = y - 12 + "px";
-    
-    circle.style.scale = (circles.length - index) / circles.length;
-    
-    circle.x = x;
-    circle.y = y;
+    let x = coords.x;
+    let y = coords.y;
 
-    const nextCircle = circles[index + 1] || circles[0];
-    x += (nextCircle.x - x) * 0.3;
-    y += (nextCircle.y - y) * 0.3;
-  });
- 
-  requestAnimationFrame(animateCircles);
+    circles.forEach(function (circle, index) {
+        circle.style.left = x - 12 + "px";
+        circle.style.top = y - 12 + "px";
+        circle.style.scale = (circles.length - index) / circles.length;
+
+        circle.x = x;
+        circle.y = y;
+
+        const nextCircle = circles[index + 1] || circles[0];
+        x += (nextCircle.x - x) * 0.3;
+        y += (nextCircle.y - y) * 0.3;
+    });
+
+    requestAnimationFrame(animateCircles);
 }
 
 animateCircles();
+
+
+
+//===================================================================================
+
+
+
+
+
+
+
+
 
 
 
